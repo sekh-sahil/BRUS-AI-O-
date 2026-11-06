@@ -3,7 +3,7 @@ services:
     name: brus-ai-api
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn web_main:app --host 0.0.0.0 --port $PORT
+    startCommand: gunicorn web_main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
     healthCheckPath: /
     envVars:
       - key: PYTHON_VERSION

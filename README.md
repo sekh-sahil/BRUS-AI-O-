@@ -48,8 +48,9 @@ a public web page.
 
 ### Deploy
 
-- **Render:** use the included `render.yaml`; add API keys as environment
-  variables in the Render dashboard.
+- **Render:** use the included `render.yaml`; it runs the FastAPI app with
+  Gunicorn and Uvicorn's worker. Add API keys as environment variables in the
+  Render dashboard.
 - **Railway:** deploy from the repository; the included `Procfile` starts
   Uvicorn using Railway's `PORT`.
 - **Vercel:** this ASGI configuration targets persistent web services such as
