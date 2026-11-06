@@ -1,0 +1,19 @@
+**The First Step in Python: Creating text.py**
+
+When you begin your journey into programming with Python, the very first task is often deceptively simple: creating a file. Specifically, the request to write a basic code with the filename `text.py` is not just about typing code, but about understanding the fundamental relationship between your editor, the file system, and the Python interpreter. To do this correctly, you must follow a straightforward process that ensures your code is recognized and executed as intended.
+
+First, you need to select a text editor or an Integrated Development Environment (IDE). For beginners, simple editors like Notepad, Sublime Text, or VS Code are excellent choices. Once your editor is open, you will create a new file. The critical step here is saving this file with the correct extension: `.py`. You should name the file exactly `text.py`. This extension is vital because it tells your operating system and the Python interpreter that the contents of this file are Python source code, not just plain text or HTML.
+
+Once the file `text.py` is created and open in your editor, you can begin writing your basic code. A classic starting point is the "Hello, World!" program, which serves as a universal greeting in the programming world. You would type the following line into your file:
+
+```python
+print("Hello, World!")
+```
+
+This single line of code does two things. First, it uses the built-in `print()` function, which sends output to the screen. Second, it takes the string `"Hello, World!"` as an argument. The use of quotation marks is essential here because they define the text as a string data type. Without them, Python would look for a variable named `Hello`, which would likely cause an error.
+
+After typing your code, you must save the file. In most editors, this is done by pressing `Ctrl + S` (or `Cmd + S` on Mac). Saving the file writes the code to your hard drive, making it permanent. If you fail to save, your changes will be lost when you close the editor.
+
+The final step is to run the code. You can do this by opening a terminal or command prompt, navigating to the directory where `text.py` is located, and typing the command `python text.py` (or `python3 text.py` on some systems). When you press Enter, the Python interpreter will read the file, execute the `print` command, and display `Hello, World!` on your screen.
+
+In summary, writing a basic Python code in a file named `text.py` involves creating a new text file, saving it with the `.py` extension, writing simple, valid Python syntax like `print("Hello, World!")`, saving the file, and then executing it via the terminal. This process establishes the foundation for all future Python projects, teaching you how to structure, save, and run your first program.

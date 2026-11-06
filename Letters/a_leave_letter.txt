@@ -1,0 +1,30 @@
+[Current Date]
+
+**To,**
+The Manager,
+[Department Name],
+[Company Name],
+[Company Address]
+
+**From,**
+Rahul [Last Name]
+[Your Job Title]
+[Department Name]
+
+**Subject:** Application for Leave from [Start Date] to [End Date]
+
+Dear Mr./Ms. [Manager's Last Name],
+
+I am writing to formally request leave from my position as [Your Job Title] from [Start Date] to [End Date]. I plan to return to work on [Return Date].
+
+The reason for this leave is [briefly state the reason, e.g., to attend a family function / to undergo personal medical treatment / for a planned vacation]. I have ensured that all my urgent tasks are completed before my departure. Furthermore, I have arranged for [Colleague's Name] to handle any immediate responsibilities that may arise during my absence to ensure a smooth workflow.
+
+I will remain accessible via email for any critical matters should the need arise. I have attached the necessary medical certificate/approval document [if applicable] for your reference.
+
+Thank you for considering my request. I look forward to your approval.
+
+Sincerely,
+
+Rahul [Last Name]
+[Your Phone Number]
+[Your Email Address]

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Speech Recognition</title>
+
+</head>
+
+<body>
+
+    <button
+        id="start"
+        onclick="startRecognition()"
+    >
+        Start Recognition
+    </button>
+
+    <button
+        id="end"
+        onclick="stopRecognition()"
+    >
+        Stop Recognition
+    </button>
+
+    <p id="output"></p>
+
+
+    <script>
+
+        const output =
+            document.getElementById("output");
+
+        let recognition = null;
+
+
+        function startRecognition() {
+
+            try {
+
+                if (recognition) {
+
+                    try {
+
+                        recognition.stop();
+
+                    } catch(e) {}
+
+                }
+
+
+                recognition =
+                    new webkitSpeechRecognition();
+
+
+                recognition.lang =
+                    "en-US";
+
+
+                recognition.continuous =
+                    false;
+
+
+                recognition.interimResults =
+                    false;
+
+
+                recognition.maxAlternatives =
+                    1;
+
+
+                recognition.onresult =
+                    function(event) {
+
+                        const transcript =
+                            event.results[0][0].transcript;
+
+
+                        output.textContent =
+                            transcript;
+
+                    };
+
+
+                recognition.onerror =
+                    function(event) {
+
+                        console.log(
+                            "Speech error:",
+                            event.error
+                        );
+
+                    };
+
+
+                recognition.onend =
+                    function() {
+
+                        console.log(
+                            "Recognition ended"
+                        );
+
+                    };
+
+
+                recognition.start();
+
+            }
+
+            catch(error) {
+
+                console.log(
+                    "Recognition start error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        function stopRecognition() {
+
+            if (recognition) {
+
+                try {
+
+                    recognition.stop();
+
+                } catch(e) {}
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
