@@ -4,7 +4,7 @@ services:
     runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn web_main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
-    healthCheckPath: /
+    healthCheckPath: /api/health
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.8
@@ -12,5 +12,17 @@ services:
         sync: false
       - key: COHERE_API_KEY
         sync: false
-      - key: API_ACCESS_TOKEN
+      - key: AUTH0_DOMAIN
         sync: false
+      - key: AUTH0_CLIENT_ID
+        sync: false
+      - key: AUTH0_AUDIENCE
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: CHAT_RATE_LIMIT_PER_MINUTE
+        value: "60"
+      - key: ASSISTANT_NAME
+        value: BRUS-AI
+      - key: BRUS_USERNAME
+        value: User

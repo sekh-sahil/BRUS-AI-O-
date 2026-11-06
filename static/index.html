@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10151d">
+  <title>BRUS-AI</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #10151d;
+      color: #e8edf5;
+      font-synthesis: none;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background: radial-gradient(ellipse at 48% -15%, #233348 0, #10151d 58%);
+    }
+
+    button, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .shell { display: flex; min-height: 100vh; }
+
+    aside {
+      display: flex;
+      width: 264px;
+      flex: 0 0 264px;
+      flex-direction: column;
+      gap: 20px;
+      padding: 26px 18px;
+      border-right: 1px solid #29313d;
+      background: rgb(13 18 25 / 88%);
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid #3e6479;
+      border-radius: 14px;
+      background: linear-gradient(145deg, #1d4152, #172733);
+      color: #a7e7ee;
+      font-size: 19px;
+      font-weight: 800;
+    }
+    .brand-name { font-size: 16px; font-weight: 700; letter-spacing: .12em; }
+    .brand-caption { margin-top: 3px; color: #8290a1; font-size: 11px; }
+
+    .new-chat, .login-button, .send-button {
+      border: 0;
+      border-radius: 10px;
+      background: #74d6db;
+      color: #102127;
+      font-weight: 700;
+      transition: filter .15s ease, transform .15s ease;
+    }
+    .new-chat:hover, .login-button:hover, .send-button:hover { filter: brightness(1.08); }
+    .new-chat:active, .login-button:active, .send-button:active { transform: translateY(1px); }
+    .new-chat { padding: 11px 14px; text-align: left; }
+    .sidebar-label { color: #7e8b9b; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .history-list { display: flex; flex: 1; flex-direction: column; gap: 7px; overflow: auto; }
+    .history-item {
+      overflow: hidden;
+      padding: 10px 11px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      background: transparent;
+      color: #bdc7d4;
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .history-item:hover { border-color: #293846; background: #18212b; }
+    .sidebar-foot { color: #738092; font-size: 11px; line-height: 1.6; }
+
+    main { display: flex; min-width: 0; flex: 1; flex-direction: column; }
+    .topbar {
+      display: flex;
+      min-height: 74px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px clamp(18px, 4vw, 48px);
+      border-bottom: 1px solid #29313d;
+      background: rgb(16 21 29 / 74%);
+    }
+    .topbar-title { font-size: 14px; font-weight: 650; }
+    .topbar-subtitle { margin-top: 4px; color: #8793a2; font-size: 12px; }
+    .user-area { display: flex; align-items: center; gap: 12px; color: #aab4c1; font-size: 12px; }
+    .plain-button {
+      padding: 8px 11px;
+      border: 1px solid #384451;
+      border-radius: 8px;
+      background: #171e28;
+      color: #cbd4df;
+    }
+    .plain-button:hover { background: #202a36; }
+
+    .content { display: flex; width: min(940px, 100%); flex: 1; flex-direction: column; align-self: center; padding: 36px 24px 24px; }
+    .welcome { margin: auto auto 30px; text-align: center; }
+    .welcome-orb {
+      display: grid;
+      width: 66px;
+      height: 66px;
+      margin: 0 auto 20px;
+      place-items: center;
+      border: 1px solid #416275;
+      border-radius: 22px;
+      background: linear-gradient(145deg, #254858, #162833);
+      box-shadow: 0 0 55px rgb(83 206 217 / 12%);
+      color: #aff1f0;
+      font-size: 27px;
+    }
+    h1 { margin: 0; font-size: clamp(26px, 4vw, 36px); letter-spacing: -.04em; }
+    .welcome p { max-width: 480px; margin: 12px auto 0; color: #9aa7b6; line-height: 1.6; }
+    .conversation { display: flex; flex-direction: column; gap: 20px; margin: 0 0 26px; }
+    .message { display: flex; gap: 12px; align-items: flex-start; }
+    .message.user { flex-direction: row-reverse; }
+    .avatar {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      place-items: center;
+      border: 1px solid #344250;
+      border-radius: 11px;
+      background: #1c2732;
+      color: #9edee3;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .message.user .avatar { border-color: #397078; background: #23464b; color: #c8ffff; }
+    .bubble { max-width: min(680px, calc(100% - 50px)); color: #dce4ed; line-height: 1.65; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .message.user .bubble { padding: 10px 14px; border: 1px solid #334550; border-radius: 13px 4px 13px 13px; background: #1c2933; }
+    .sources { display: flex; flex-direction: column; gap: 7px; margin-top: 12px; }
+    .source-link { color: #81d8dc; font-size: 12px; text-decoration: none; }
+    .source-link:hover { text-decoration: underline; }
+    .source-snippet { margin-top: 3px; color: #8998a8; font-size: 11px; }
+
+    .composer-wrap { margin-top: auto; }
+    .composer {
+      padding: 12px;
+      border: 1px solid #364553;
+      border-radius: 15px;
+      background: #171e27;
+      box-shadow: 0 12px 40px rgb(0 0 0 / 16%);
+    }
+    textarea {
+      display: block;
+      width: 100%;
+      min-height: 62px;
+      max-height: 180px;
+      resize: vertical;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #e6edf5;
+      line-height: 1.5;
+    }
+    textarea::placeholder { color: #788696; }
+    .composer-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 10px; border-top: 1px solid #2c3641; }
+    .tool-group { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    .select-wrap, .toggle { color: #aab6c4; font-size: 12px; }
+    select { margin-left: 5px; padding: 6px 8px; border: 1px solid #364553; border-radius: 7px; background: #111821; color: #dce4ed; }
+    .toggle { display: flex; align-items: center; gap: 6px; }
+    .toggle input { accent-color: #74d6db; }
+    .send-button { padding: 9px 16px; }
+    .send-button:disabled { cursor: wait; opacity: .6; }
+    .hint { margin: 10px 2px 0; color: #748193; font-size: 11px; text-align: center; }
+    .notice { margin: auto; color: #aab6c4; line-height: 1.6; text-align: center; }
+    .notice.error { color: #ffb2a7; }
+    .auth-card { width: min(440px, 100%); margin: auto; padding: 32px; border: 1px solid #33414f; border-radius: 18px; background: #151d27; text-align: center; }
+    .auth-card p { color: #9aa7b6; line-height: 1.6; }
+    .login-button { margin-top: 12px; padding: 11px 22px; }
+    [hidden] { display: none !important; }
+
+    @media (max-width: 720px) {
+      aside { width: 68px; flex-basis: 68px; align-items: center; padding: 18px 8px; }
+      .brand { justify-content: center; }
+      .brand-copy, .new-chat span, .sidebar-label, .history-list, .sidebar-foot { display: none; }
+      .new-chat { width: 42px; height: 42px; padding: 0; text-align: center; }
+      .new-chat::after { content: "+"; font-size: 21px; }
+      .topbar { min-height: 64px; padding: 12px 16px; }
+      .user-area { gap: 6px; }
+      .content { padding: 28px 14px 18px; }
+      .composer-tools { align-items: flex-end; }
+      .tool-group { gap: 8px; }
+      .select-wrap { display: flex; flex-direction: column; gap: 4px; }
+      select { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside aria-label="Conversation sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">B</div>
+        <div class="brand-copy">
+          <div class="brand-name">BRUS-AI</div>
+          <div class="brand-caption">Your intelligent assistant</div>
+        </div>
+      </div>
+      <button class="new-chat" id="new-chat" type="button"><span>＋ &nbsp;New chat</span></button>
+      <div class="sidebar-label">Recent chats</div>
+      <div class="history-list" id="history-list"></div>
+      <div class="sidebar-foot">Conversations stay in this browser session and are not stored on the server.</div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <div class="topbar-title" id="assistant-title">BRUS-AI</div>
+          <div class="topbar-subtitle">A helpful assistant, ready when you are</div>
+        </div>
+        <div class="user-area" id="user-area" hidden>
+          <span id="user-name"></span>
+          <button class="plain-button" id="logout" type="button">Sign out</button>
+        </div>
+      </header>
+
+      <section class="content">
+        <div class="auth-card" id="auth-card" hidden>
+          <div class="welcome-orb" aria-hidden="true">✦</div>
+          <h1>Welcome back</h1>
+          <p>Sign in securely to start a conversation with BRUS-AI.</p>
+          <button class="login-button" id="login" type="button">Continue with Auth0</button>
+        </div>
+
+        <div class="notice" id="status" role="status" aria-live="polite">Connecting securely…</div>
+        <div class="welcome" id="welcome" hidden>
+          <div class="welcome-orb" aria-hidden="true">✦</div>
+          <h1>How can I help?</h1>
+          <p>Ask a question, explore an idea, or look something up on the web.</p>
+        </div>
+        <div class="conversation" id="conversation" aria-live="polite"></div>
+
+        <div class="composer-wrap" id="composer-wrap" hidden>
+          <form class="composer" id="chat-form">
+            <textarea id="message" maxlength="4000" placeholder="Message BRUS-AI…" aria-label="Message" required></textarea>
+            <div class="composer-tools">
+              <div class="tool-group">
+                <label class="select-wrap">Provider
+                  <select id="provider" aria-label="AI provider">
+                    <option value="groq">Groq</option>
+                    <option value="cohere">Cohere</option>
+                  </select>
+                </label>
+                <label class="toggle"><input id="web-search" type="checkbox"> Web search</label>
+              </div>
+              <button class="send-button" id="send" type="submit">Send</button>
+            </div>
+          </form>
+          <div class="hint">AI can make mistakes. Verify important information.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const statusBox = document.getElementById("status");
+    const authCard = document.getElementById("auth-card");
+    const welcome = document.getElementById("welcome");
+    const conversation = document.getElementById("conversation");
+    const composerWrap = document.getElementById("composer-wrap");
+    const chatForm = document.getElementById("chat-form");
+    const messageInput = document.getElementById("message");
+    const sendButton = document.getElementById("send");
+    const historyList = document.getElementById("history-list");
+    let authClient;
+    let authUser;
+    let chatHistory = [];
+    const conversations = [];
+    let activeConversation;
+
+    function showError(message) {
+      statusBox.textContent = message;
+      statusBox.className = "notice error";
+      statusBox.hidden = false;
+    }
+
+    function appendMessage(role, text, sources = []) {
+      const row = document.createElement("article");
+      row.className = `message ${role}`;
+      const avatar = document.createElement("div");
+      avatar.className = "avatar";
+      avatar.textContent = role === "user" ? "You" : "AI";
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = text;
+      row.append(avatar, bubble);
+      if (sources.length) {
+        const sourceList = document.createElement("div");
+        sourceList.className = "sources";
+        for (const source of sources) {
+          let url;
+          try { url = new URL(source.url); } catch { continue; }
+          if (url.protocol !== "https:" && url.protocol !== "http:") continue;
+          const item = document.createElement("div");
+          const link = document.createElement("a");
+          link.className = "source-link";
+          link.href = url.href;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = source.title || url.hostname;
+          item.append(link);
+          if (source.snippet) {
+            const snippet = document.createElement("div");
+            snippet.className = "source-snippet";
+            snippet.textContent = source.snippet;
+            item.append(snippet);
+          }
+          sourceList.append(item);
+        }
+        bubble.append(sourceList);
+      }
+      conversation.append(row);
+      row.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      return row;
+    }
+
+    function renderSidebar() {
+      historyList.replaceChildren();
+      for (const chat of conversations) {
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = "history-item";
+        item.textContent = chat.title;
+        item.title = chat.title;
+        item.addEventListener("click", () => selectConversation(chat));
+        historyList.append(item);
+      }
+    }
+
+    function selectConversation(chat) {
+      activeConversation = chat;
+      chatHistory = activeConversation.messages;
+      conversation.replaceChildren();
+      for (const message of chatHistory) appendMessage(message.role, message.content);
+      welcome.hidden = chatHistory.length > 0;
+      messageInput.focus();
+    }
+
+    function startConversation() {
+      activeConversation = { title: "New chat", messages: [] };
+      conversations.unshift(activeConversation);
+      chatHistory = activeConversation.messages;
+      renderSidebar();
+      conversation.replaceChildren();
+      welcome.hidden = false;
+      messageInput.focus();
+    }
+
+    function showChat() {
+      statusBox.hidden = true;
+      authCard.hidden = true;
+      welcome.hidden = chatHistory.length > 0;
+      conversation.hidden = false;
+      composerWrap.hidden = false;
+      document.getElementById("user-area").hidden = false;
+      document.getElementById("user-name").textContent = authUser.name || authUser.email || "";
+      messageInput.focus();
+    }
+
+    async function initialize() {
+      try {
+        const response = await fetch("/api/config");
+        if (!response.ok) throw new Error("Auth0 is not configured. Set its domain, client ID, and API audience in Render.");
+        const config = await response.json();
+        document.getElementById("assistant-title").textContent = config.assistant_name;
+        document.title = config.assistant_name;
+        await new Promise((resolve, reject) => {
+          const sdk = document.createElement("script");
+          sdk.src = "https://cdn.auth0.com/js/auth0-spa-js/2.1/auth0-spa-js.production.js";
+          sdk.onload = resolve;
+          sdk.onerror = () => reject(new Error("Could not load the Auth0 browser SDK."));
+          document.head.append(sdk);
+        });
+        authClient = await window.auth0.createAuth0Client({
+          domain: config.auth0_domain,
+          clientId: config.auth0_client_id,
+          cacheLocation: "memory",
+          authorizationParams: {
+            audience: config.auth0_audience,
+            redirect_uri: window.location.origin,
+            scope: "openid profile email"
+          }
+        });
+        if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
+          await authClient.handleRedirectCallback();
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        if (await authClient.isAuthenticated()) {
+          authUser = await authClient.getUser();
+          startConversation();
+          showChat();
+        } else {
+          statusBox.hidden = true;
+          authCard.hidden = false;
+        }
+      } catch (error) {
+        showError(error.message || "The frontend could not be initialized.");
+      }
+    }
+
+    document.getElementById("login").addEventListener("click", () => authClient.loginWithRedirect());
+    document.getElementById("logout").addEventListener("click", () => authClient.logout({
+      logoutParams: { returnTo: window.location.origin }
+    }));
+    document.getElementById("new-chat").addEventListener("click", () => {
+      startConversation();
+    });
+
+    chatForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const message = messageInput.value.trim();
+      if (!message || sendButton.disabled) return;
+      const previousHistory = chatHistory.slice(-20);
+      appendMessage("user", message);
+      messageInput.value = "";
+      sendButton.disabled = true;
+      sendButton.textContent = "Thinking…";
+      welcome.hidden = true;
+      try {
+        const token = await authClient.getTokenSilently();
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message,
+            provider: document.getElementById("provider").value,
+            web_search: document.getElementById("web-search").checked,
+            history: previousHistory
+          })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.detail || "The chat request failed.");
+        appendMessage("assistant", result.response, result.sources);
+        chatHistory = [...previousHistory, { role: "user", content: message }, { role: "assistant", content: result.response }].slice(-20);
+        activeConversation.messages = chatHistory;
+        if (previousHistory.length === 0) {
+          activeConversation.title = message;
+          renderSidebar();
+        }
+      } catch (error) {
+        appendMessage("assistant", `Sorry, I couldn't complete that request. ${error.message || ""}`);
+      } finally {
+        sendButton.disabled = false;
+        sendButton.textContent = "Send";
+        messageInput.focus();
+      }
+    });
+
+    messageInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        chatForm.requestSubmit();
+      }
+    });
+
+    initialize();
+  </script>
+</body>
+</html>
